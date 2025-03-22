@@ -13,7 +13,7 @@ info:
     identifier: MIT
 
 servers:
-  - url: https://try.api.devopsbeerer.ch
+  - url: https://try.devopsbeerer.ch/rest/Beerer+API/1.0.0
     description: Mock Server
 
 tags:
