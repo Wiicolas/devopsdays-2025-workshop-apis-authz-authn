@@ -328,28 +328,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Beer"
-                    example:
-                      - id: "550e8400-e29b-41d4-a716-446655440000"
-                        name: "Hazy Wonder"
-                        style: "IPA"
-                        abv: 6.5
-                        ibu: 45
-                        isAvailable: true
-                        createdDate: "2022-01-01T12:00:00Z"
-                        updatedDate: "2022-01-01T12:00:00Z"
-                      - id: "550e8400-e29b-41d4-a716-446655440001"
-                        name: "Midnight Stout"
-                        style: "Imperial Stout"
-                        abv: 9.2
-                        ibu: 60
-                        isAvailable: false
-                        createdDate: "2022-01-03T09:15:00Z"
-                        updatedDate: "2022-02-01T10:45:00Z"
                   total:
                     type: integer
                     description: Total number of beers matching the filter criteria
                     example: 2
-                examples:
+              examples:
+                all:
+                  value:
                   - data:
                       - id: "550e8400-e29b-41d4-a716-446655440000"
                         name: "Hazy Wonder"
@@ -376,6 +361,10 @@ paths:
                         createdDate: "2022-01-02T14:30:00Z"
                         updatedDate: "2022-01-02T14:30:00Z"
                     total: 3
+                empty:
+                  value:
+                  - data: []
+                    total: 0
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
