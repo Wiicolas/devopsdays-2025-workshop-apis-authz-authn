@@ -454,7 +454,7 @@ paths:
                       isAvailable: true
                       createdDate: "2022-01-01T12:00:00Z"
                       updatedDate: "2022-01-01T12:00:00Z"
-                MidnightStout:
+                midnightStout:
                   value:
                     - id: "550e8400-e29b-41d4-a716-446655440001"
                       name: "Midnight Stout"
@@ -464,7 +464,7 @@ paths:
                       isAvailable: false
                       createdDate: "2022-01-03T09:15:00Z"
                       updatedDate: "2022-02-01T10:45:00Z"
-                PilsnerParadise:
+                pilsnerParadise:
                   value:
                     - id: "550e8400-e29b-41d4-a716-446655440002"
                       name: "Pilsner Paradise"
@@ -510,7 +510,7 @@ paths:
                       isAvailable: true
                       createdDate: "2022-01-01T12:00:00Z"
                       updatedDate: "2022-01-01T12:00:00Z"
-                MidnightStout:
+                midnightStout:
                   value:
                     - id: "550e8400-e29b-41d4-a716-446655440001"
                       name: "Midnight Stout"
@@ -520,7 +520,7 @@ paths:
                       isAvailable: false
                       createdDate: "2022-01-03T09:15:00Z"
                       updatedDate: "2022-02-01T10:45:00Z"
-                PilsnerParadise:
+                pilsnerParadise:
                   value:
                     - id: "550e8400-e29b-41d4-a716-446655440002"
                       name: "Pilsner Paradise"
