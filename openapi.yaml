@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.1.0
 info:
   title: Petstore API
   version: 1.0.0
@@ -28,11 +28,22 @@ components:
           type: string
       required:
         - name
+servers:
+  - url: https://test
+
+tags:
+  - name: pet
+
 paths:
   /my/pets:
     get:
+      description: "ss"
+      operationId: getPets
+      tags:
+        - pet
       responses:
         "200":
+          description: "zesz"
           content:
             application/json:
               schema:
