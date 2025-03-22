@@ -28,3 +28,25 @@ components:
           type: string
       required:
         - name
+paths:
+  /my/pets:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+              examples:
+                my_pets:
+                  value:
+                    - id: 1
+                      name: Zaza
+                    - id: 2
+                      name: Tigress
+                    - id: 3
+                      name: Maki
+                    - id: 4
+                      name: Toufik
