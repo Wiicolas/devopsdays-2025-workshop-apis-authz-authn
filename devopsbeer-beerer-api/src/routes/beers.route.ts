@@ -1,15 +1,14 @@
+import { randomUUID } from "crypto";
 import { Request, Response, Router } from "express";
 import { JSONFilePreset } from 'lowdb/node';
-import passport from 'passport';
+import BeerCreate from "src/models/beer-create.js";
 import requireScope from "../middlewares/require-scope.js";
 import Beer from "../models/beer.js";
-import BeerCreate from "src/models/beer-create.js";
-import { randomUUID } from "crypto";
+import Error from "../models/error.js";
+import { ForbiddenResponse, NotFoundResponse } from "../utils.js";
 
 const router = Router();
 const db = await JSONFilePreset<{ beers: Beer[] }>('db.json', { beers: [] });
-
-router.use(passport.authenticate('oauth-bearer', { session: false }));
 
 router.get('', requireScope("Beers.Read.All"), async (req: Request, res: Response) => {
     const isAvailableFiltering: string | undefined = req.query.isAvailable as string | undefined
@@ -31,7 +30,8 @@ router.post('', requireScope("Beers.Write"), async (req: Request, res: Response)
     const isAdmin = currentUser.roles && currentUser.roles.includes('Admin');
 
     if (!isAdmin) {
-        res.status(403).json({ "message": "Only administrators can add a beer" });
+        const error: Error = ForbiddenResponse();
+        res.status(error.code).json(error);
         return;
     }
 
@@ -50,7 +50,8 @@ router.get('/:id', requireScope("Beers.Read"), async (req: Request, res: Respons
     const beer: Beer | undefined = db.data.beers.find(beer => beer.id === id);
 
     if (!beer) {
-        res.status(404).json({ "message": "Beer not found" });
+        const error: Error = NotFoundResponse();
+        res.status(error.code).json(error);
         return;
     }
 
@@ -67,7 +68,8 @@ router.delete('/:id', requireScope("Beers.Write"), async (req: Request, res: Res
     const beer = db.data.beers.find(beer => beer.id === id);
 
     if (!beer) {
-        res.status(404).json({ "message": "Beer not found" });
+        const error: Error = NotFoundResponse();
+        res.status(error.code).json(error);
         return;
     }
 
@@ -75,7 +77,8 @@ router.delete('/:id', requireScope("Beers.Write"), async (req: Request, res: Res
     const isAdmin = currentUser.roles && currentUser.roles.includes('Admin');
 
     if (!isAdmin) {
-        res.status(403).json({ "message": "Only administrators can delete this beer" });
+        const error: Error = ForbiddenResponse();
+        res.status(error.code).json(error);
         return;
     }
 

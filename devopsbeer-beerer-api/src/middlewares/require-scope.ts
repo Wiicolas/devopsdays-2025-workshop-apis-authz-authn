@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import Error from "../models/error.js";
+import { ForbiddenResponse, UnauthorizedResponse } from "../utils.js";
 
 const requireScope = (scopeName?: string) => {
     return (req: Request, res: Response, next: NextFunction): void => {
         if (!req.authInfo) {
-            res.status(401).json({ 'message': 'Authentication information missing' });
+            const error: Error = UnauthorizedResponse();
+            res.status(error.code).json(error);
             return;
         }
 
@@ -16,7 +19,8 @@ const requireScope = (scopeName?: string) => {
         const scopes = typeof scopeString === 'string' ? scopeString.split(' ') : [];
 
         if (!scopes.includes(scopeName)) {
-            res.status(403).json({ 'message': `Access forbidden: missing ${scopeName} scope` });
+            const error: Error = ForbiddenResponse();
+            res.status(error.code).json(error);
             return;
         }
 

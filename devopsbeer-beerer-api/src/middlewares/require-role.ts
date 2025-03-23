@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import Error from "../models/error.js";
+import { ForbiddenResponse, UnauthorizedResponse } from "../utils.js";
 
 const requireRole = (roleName?: string) => {
     return (req: Request, res: Response, next: NextFunction): void => {
         if (!req.authInfo) {
-            res.status(401).json({ 'message': 'Authentication information missing' });
+            const error: Error = UnauthorizedResponse();
+            res.status(error.code).json(error);
             return;
         }
 
@@ -15,7 +18,8 @@ const requireRole = (roleName?: string) => {
         const roles: string[] = req.authInfo.roles || [];
 
         if (!roles.includes(roleName)) {
-            res.status(403).json({ 'message': `Access forbidden: missing ${roleName} role` });
+            const error: Error = ForbiddenResponse();
+            res.status(error.code).json(error);
             return;
         }
 
