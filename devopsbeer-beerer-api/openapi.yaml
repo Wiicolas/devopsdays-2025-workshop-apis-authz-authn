@@ -13,7 +13,7 @@ info:
     identifier: MIT
 
 servers:
-  - url: httèp://localhost:3000/1.0.0
+  - url: http://localhost:3000/1.0.0
     description: Local development server
   - url: https://api.devopsbeerer.ch/1.0
     description: Production server
@@ -349,7 +349,6 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
-
     post:
       summary: Create a new beer
       description: Creates a new beer in the database
@@ -405,7 +404,6 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
-
   /beers/{beerId}:
     parameters:
       - $ref: "#/components/parameters/beerId"
