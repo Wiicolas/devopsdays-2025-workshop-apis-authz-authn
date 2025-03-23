@@ -120,6 +120,7 @@ components:
         - name
         - style
         - abv
+        - ibu
         - quantity
       properties:
         name:
