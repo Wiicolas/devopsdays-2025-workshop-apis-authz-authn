@@ -23,11 +23,13 @@
   "author": "Quentin RODIC",
   "license": "ISC",
   "dependencies": {
+    "@types/passport-jwt": "^4.0.1",
     "express": "^5.0.1",
     "lowdb": "^7.0.1",
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
     "passport-azure-ad": "^4.3.5",
+    "passport-jwt": "^4.0.1",
     "passport-keycloak-bearer": "^2.4.1",
     "uuid": "^11.1.0",
     "winston": "^3.17.0"
