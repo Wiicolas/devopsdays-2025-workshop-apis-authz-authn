@@ -29,29 +29,25 @@ components:
     BeerName:
       type: string
       description: Name of the beer
-      example: "Hazy Wonder"
 
     BeerStyle:
       type: string
       description: Style of the beer
-      example: "IPA"
 
     BeerABV:
       type: number
       format: float
       description: Alcohol by volume percentage
-      example: 6.5
 
     BeerIBU:
       type: number
       format: float
       description: International Bitterness Units
-      example: 45
 
-    BeerAvailability:
-      type: boolean
-      description: Whether the beer is currently available
-      default: true
+    BeerQuantity:
+      type: number
+      description: Quantity of this beer
+      default: 0
 
     Beer:
       description: A beer object
@@ -60,6 +56,7 @@ components:
         - name
         - style
         - abv
+        - quantity
       properties:
         id:
           type: string
@@ -78,8 +75,8 @@ components:
           $ref: "#/components/schemas/BeerABV"
         ibu:
           $ref: "#/components/schemas/BeerIBU"
-        isAvailable:
-          $ref: "#/components/schemas/BeerAvailability"
+        quantity:
+          $ref: "#/components/schemas/BeerQuantity"
         createdDate:
           type: string
           format: date-time
@@ -96,7 +93,7 @@ components:
           style: "IPA"
           abv: 6.5
           ibu: 45
-          isAvailable: true
+          quantity: 4
           createdDate: "2022-01-01T12:00:00Z"
           updatedDate: "2022-01-01T12:00:00Z"
         - id: "550e8400-e29b-41d4-a716-446655440001"
@@ -104,7 +101,7 @@ components:
           style: "Imperial Stout"
           abv: 9.2
           ibu: 60
-          isAvailable: false
+          quantity: 9
           createdDate: "2022-01-03T09:15:00Z"
           updatedDate: "2022-02-01T10:45:00Z"
         - id: "550e8400-e29b-41d4-a716-446655440002"
@@ -112,25 +109,9 @@ components:
           style: "Pilsner"
           abv: 4.8
           ibu: 20
-          isAvailable: true
+          quantity: 0
           createdDate: "2022-01-02T14:30:00Z"
           updatedDate: "2022-01-02T14:30:00Z"
-        - id: "550e8400-e29b-41d4-a716-446655440003"
-          name: "Berry Blast"
-          style: "Fruited Sour"
-          abv: 5.2
-          ibu: 10
-          isAvailable: true
-          createdDate: "2022-03-15T11:20:00Z"
-          updatedDate: "2022-03-15T11:20:00Z"
-        - id: "550e8400-e29b-41d4-a716-446655440004"
-          name: "Sunny Wheat"
-          style: "Hefeweizen"
-          abv: 5.0
-          ibu: 15
-          isAvailable: true
-          createdDate: "2022-04-01T08:45:00Z"
-          updatedDate: "2022-05-01T09:30:00Z"
 
     BeerCreate:
       description: Input object for creating a new beer
@@ -139,6 +120,7 @@ components:
         - name
         - style
         - abv
+        - quantity
       properties:
         name:
           $ref: "#/components/schemas/BeerName"
@@ -149,28 +131,21 @@ components:
         ibu:
           $ref: "#/components/schemas/BeerIBU"
         isAvailable:
-          $ref: "#/components/schemas/BeerAvailability"
+          $ref: "#/components/schemas/BeerQuantity"
       examples:
         - name: "Hazy Wonder"
           style: "IPA"
           abv: 6.5
           ibu: 45
-          isAvailable: true
+          quantity: 4
         - name: "Midnight Stout"
           style: "Imperial Stout"
           abv: 9.2
+          quantity: 9
         - name: "Pilsner Paradise"
           style: "Pilsner"
           abv: 4.8
-        - name: "Berry Blast"
-          style: "Fruited Sour"
-          abv: 5.2
-          isAvailable: false
-        - name: "Sunny Wheat"
-          style: "Hefeweizen"
-          abv: 5.0
-          ibu: 15
-          isAvailable: true
+          quantity: 0
 
     BeerUpdate:
       description: Input object for updating an existing beer
@@ -184,28 +159,22 @@ components:
           $ref: "#/components/schemas/BeerABV"
         ibu:
           $ref: "#/components/schemas/BeerIBU"
-        isAvailable:
-          $ref: "#/components/schemas/BeerAvailability"
+        quantity:
+          $ref: "#/components/schemas/BeerQuantity"
       examples:
         - name: "Hazy Wonder"
           style: "IPA"
-          ibu: 32
-          isAvailable: false
+          abv: 6.5
+          ibu: 45
+          quantity: 4
         - name: "Midnight Stout"
+          style: "Imperial Stout"
           abv: 9.2
-          ibu: 15
+          quantity: 9
         - name: "Pilsner Paradise"
           style: "Pilsner"
           abv: 4.8
-        - name: "Berry Blast"
-          style: "Fruited Sour"
-          abv: 5.2
-          isAvailable: false
-        - name: "Sunny Wheat"
-          style: "Hefeweizen"
-          abv: 5.0
-          ibu: 15
-          isAvailable: true
+          quantity: 0
 
     Error:
       type: object
@@ -321,7 +290,7 @@ paths:
                         style: "IPA"
                         abv: 6.5
                         ibu: 45
-                        isAvailable: true
+                        quantity: 4
                         createdDate: "2022-01-01T12:00:00Z"
                         updatedDate: "2022-01-01T12:00:00Z"
                       - id: "550e8400-e29b-41d4-a716-446655440001"
@@ -329,7 +298,7 @@ paths:
                         style: "Imperial Stout"
                         abv: 9.2
                         ibu: 60
-                        isAvailable: false
+                        quantity: 9
                         createdDate: "2022-01-03T09:15:00Z"
                         updatedDate: "2022-02-01T10:45:00Z"
                       - id: "550e8400-e29b-41d4-a716-446655440002"
@@ -337,7 +306,7 @@ paths:
                         style: "Pilsner"
                         abv: 4.8
                         ibu: 20
-                        isAvailable: true
+                        quantity: 0
                         createdDate: "2022-01-02T14:30:00Z"
                         updatedDate: "2022-01-02T14:30:00Z"
                     total: 3
@@ -377,7 +346,7 @@ paths:
                     style: "IPA"
                     abv: 6.5
                     ibu: 45
-                    isAvailable: true
+                    quantity: 4
                     createdDate: "2022-01-01T12:00:00Z"
                     updatedDate: "2022-01-01T12:00:00Z"
                 midnightStout:
@@ -387,7 +356,7 @@ paths:
                     style: "Imperial Stout"
                     abv: 9.2
                     ibu: 60
-                    isAvailable: false
+                    quantity: 9
                     createdDate: "2022-01-03T09:15:00Z"
                     updatedDate: "2022-02-01T10:45:00Z"
                 pilsnerParadise:
@@ -397,7 +366,7 @@ paths:
                     style: "Pilsner"
                     abv: 4.8
                     ibu: 20
-                    isAvailable: true
+                    quantity: 0
                     createdDate: "2022-01-02T14:30:00Z"
                     updatedDate: "2022-01-02T14:30:00Z"
         "400":
@@ -428,7 +397,7 @@ paths:
                     style: "IPA"
                     abv: 6.5
                     ibu: 45
-                    isAvailable: true
+                    quantity: 4
                     createdDate: "2022-01-01T12:00:00Z"
                     updatedDate: "2022-01-01T12:00:00Z"
                 midnightStout:
@@ -438,7 +407,7 @@ paths:
                     style: "Imperial Stout"
                     abv: 9.2
                     ibu: 60
-                    isAvailable: false
+                    quantity: 9
                     createdDate: "2022-01-03T09:15:00Z"
                     updatedDate: "2022-02-01T10:45:00Z"
                 pilsnerParadise:
@@ -448,7 +417,7 @@ paths:
                     style: "Pilsner"
                     abv: 4.8
                     ibu: 20
-                    isAvailable: true
+                    quantity: 0
                     createdDate: "2022-01-02T14:30:00Z"
                     updatedDate: "2022-01-02T14:30:00Z"
         "401":
@@ -484,7 +453,7 @@ paths:
                     style: "IPA"
                     abv: 6.5
                     ibu: 45
-                    isAvailable: true
+                    quantity: 4
                     createdDate: "2022-01-01T12:00:00Z"
                     updatedDate: "2022-01-01T12:00:00Z"
                 midnightStout:
@@ -494,7 +463,7 @@ paths:
                     style: "Imperial Stout"
                     abv: 9.2
                     ibu: 60
-                    isAvailable: false
+                    quantity: 9
                     createdDate: "2022-01-03T09:15:00Z"
                     updatedDate: "2022-02-01T10:45:00Z"
                 pilsnerParadise:
@@ -504,7 +473,7 @@ paths:
                     style: "Pilsner"
                     abv: 4.8
                     ibu: 20
-                    isAvailable: true
+                    quantity: 0
                     createdDate: "2022-01-02T14:30:00Z"
                     updatedDate: "2022-01-02T14:30:00Z"
         "400":
