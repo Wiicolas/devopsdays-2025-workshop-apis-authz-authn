@@ -525,7 +525,16 @@ paths:
       responses:
         "204":
           description: Beer deleted successfully
-          content: {}
+          content:
+            application/json:
+              schema: {}
+              examples:
+                hazyWonder:
+                  value: {}
+                midnightStout:
+                  value: {}
+                pilsnerParadise:
+                  value: {}
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
