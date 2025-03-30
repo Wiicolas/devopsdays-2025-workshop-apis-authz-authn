@@ -27,15 +27,16 @@ function initializeAuthentication(httpClient: HttpClient) {
           redirectUrl: customConfig.redirectUrl,
           postLogoutRedirectUri: customConfig.postLogoutRedirectUri,
           clientId: customConfig.clientId,
+          secureRoutes: customConfig.secureRoutes,
           scope: "openid profile email offline_access Beers.Read.All Beers.Read",
           responseType: "code",
           silentRenew: true,
           useRefreshToken: true,
           renewTimeBeforeTokenExpiresInSeconds: 30,
+          autoCleanStateAfterAuthentication: false,
           postLoginRoute: "/",
           historyCleanupOff: true,
-          unauthorizedRoute: "/unauthorized",
-          secureRoutes: customConfig.secureRoutes
+          unauthorizedRoute: "/unauthorized"
         };
       })
     )

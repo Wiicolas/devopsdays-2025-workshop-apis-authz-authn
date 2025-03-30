@@ -28,15 +28,6 @@
             transition-property: width;
         }
 
-        &.active,
-        &:hover {
-            &::after {
-                left: 50%;
-                right: 100%;
-                width: 100%;
-            }
-        }
-
         &:hover {
             color: hsl(41, 81%, 42%);
         }
