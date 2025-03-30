@@ -1,0 +1,32 @@
+app-header {
+    padding: 0 64px;
+    margin: auto;
+    height: 221px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 1200px) {
+    app-header {
+        width: 100%;
+        margin: auto;
+        height: auto;
+        flex-direction: column;
+        gap: 64px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    app-header {
+        width: 100%;
+        margin: auto;
+        height: auto;
+        flex-direction: column;
+        gap: 64px;
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
+}
