@@ -177,6 +177,11 @@ components:
           abv: 4.8
           quantity: 0
 
+    OrderStatus:
+      type: string
+      enum: [CREATED, DONE, REJECTED]
+      description: Status of an order
+
     Order:
       description: A beer's order object
       properties:
@@ -188,6 +193,8 @@ components:
           $ref: "#/components/schemas/BeerQuantity"
         userId:
           $ref: "#/components/schemas/UniqueId"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
         createdDate:
           type: string
           format: date-time
@@ -199,6 +206,7 @@ components:
           userId: 542032df-5c14-4491-8e01-22c84b040f7d
           quantity: 4
           createdDate: "2022-01-02T14:30:00Z"
+          status: CREATED
 
     OrderCreate:
       description: A beer's order input object
@@ -213,6 +221,14 @@ components:
         - beerId: 550e8400-e29b-41d4-a716-446655440000
           userId: 542032df-5c14-4491-8e01-22c84b040f7d
           quantity: 4
+
+    OrderUpdate:
+      description: A beer's order update input object
+      properties:
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+      examples:
+        - status: CREATED
 
     Error:
       type: object
@@ -591,6 +607,7 @@ paths:
                         userId: 542032df-5c14-4491-8e01-22c84b040f7d
                         quantity: 4
                         createdDate: "2022-01-02T14:30:00Z"
+                        status: CREATED
                     total: 1
                 empty:
                   value:
@@ -628,6 +645,7 @@ paths:
                     userId: 542032df-5c14-4491-8e01-22c84b040f7d
                     quantity: 4
                     createdDate: "2022-01-02T14:30:00Z"
+                    status: CREATED
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -656,6 +674,41 @@ paths:
                     userId: 542032df-5c14-4491-8e01-22c84b040f7d
                     quantity: 4
                     createdDate: "2022-01-02T14:30:00Z"
+                    status: CREATED
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    patch:
+      summary: Update an order by ID
+      description: Update status of an order
+      operationId: patchOrderById
+      tags:
+        - orders
+      requestBody:
+        description: Order to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderUpdate"
+      responses:
+        "200":
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+              examples:
+                hazyWonderOrder:
+                  value:
+                    id: 909c2eb9-98bd-4c31-959e-6f239c13113a
+                    beerId: 550e8400-e29b-41d4-a716-446655440000
+                    userId: 542032df-5c14-4491-8e01-22c84b040f7d
+                    quantity: 4
+                    createdDate: "2022-01-02T14:30:00Z"
+                    status: CREATED
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
