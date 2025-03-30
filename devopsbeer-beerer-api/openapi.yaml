@@ -23,9 +23,16 @@ servers:
 tags:
   - name: beers
     description: Operations related to beers
+  - name: orders
+    description: Operations related to beers's order
 
 components:
   schemas:
+    UniqueId:
+      type: string
+      description: Unique ID of element
+      format: uuid
+
     BeerName:
       type: string
       description: Name of the beer
@@ -59,14 +66,7 @@ components:
         - quantity
       properties:
         id:
-          type: string
-          format: uuid
-          description: Unique identifier for the beer
-          readOnly: true
-          examples:
-            - 29470fa4-aeec-4893-a781-4b10f017d966
-            - f3f2c45e-a856-436f-89ab-8f0c3fd39d82
-            - e8b1ea3a-8748-49d7-b251-9c17a44eb1e5
+          $ref: "#/components/schemas/UniqueId"
         name:
           $ref: "#/components/schemas/BeerName"
         style:
@@ -177,6 +177,43 @@ components:
           abv: 4.8
           quantity: 0
 
+    Order:
+      description: A beer's order object
+      properties:
+        id:
+          $ref: "#/components/schemas/UniqueId"
+        beerId:
+          $ref: "#/components/schemas/UniqueId"
+        quantity:
+          $ref: "#/components/schemas/BeerQuantity"
+        userId:
+          $ref: "#/components/schemas/UniqueId"
+        createdDate:
+          type: string
+          format: date-time
+          description: Date when the beer was created
+          readOnly: true
+      examples:
+        - id: 909c2eb9-98bd-4c31-959e-6f239c13113a
+          beerId: 550e8400-e29b-41d4-a716-446655440000
+          userId: 542032df-5c14-4491-8e01-22c84b040f7d
+          quantity: 4
+          createdDate: "2022-01-02T14:30:00Z"
+
+    OrderCreate:
+      description: A beer's order input object
+      properties:
+        beerId:
+          $ref: "#/components/schemas/UniqueId"
+        quantity:
+          $ref: "#/components/schemas/BeerQuantity"
+        userId:
+          $ref: "#/components/schemas/UniqueId"
+      examples:
+        - beerId: 550e8400-e29b-41d4-a716-446655440000
+          userId: 542032df-5c14-4491-8e01-22c84b040f7d
+          quantity: 4
+
     Error:
       type: object
       description: Error response format
@@ -223,6 +260,18 @@ components:
           value: "550e8400-e29b-41d4-a716-446655440001"
         pilsnerParadise:
           value: "550e8400-e29b-41d4-a716-446655440002"
+
+    orderId:
+      name: orderId
+      in: path
+      required: true
+      description: Unique identifier of the order
+      schema:
+        type: string
+        format: uuid
+      examples:
+        hazyWonderOrder:
+          value: "909c2eb9-98bd-4c31-959e-6f239c13113a"
 
     availabilityFilter:
       name: isAvailable
@@ -498,6 +547,134 @@ paths:
               schema: {}
               examples:
                 hazyWonder:
+                  value: {}
+                midnightStout:
+                  value: {}
+                pilsnerParadise:
+                  value: {}
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /orders:
+    get:
+      summary: List all order
+      description: Returns a list of order
+      operationId: listOrders
+      tags:
+        - orders
+      responses:
+        "200":
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - total
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Order"
+                  total:
+                    type: integer
+                    description: Total number of orders matching the filter criteria
+                    example: 2
+              examples:
+                all:
+                  value:
+                    data:
+                      - id: 909c2eb9-98bd-4c31-959e-6f239c13113a
+                        beerId: 550e8400-e29b-41d4-a716-446655440000
+                        userId: 542032df-5c14-4491-8e01-22c84b040f7d
+                        quantity: 4
+                        createdDate: "2022-01-02T14:30:00Z"
+                    total: 1
+                empty:
+                  value:
+                    data: []
+                    total: 0
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      summary: Create a new order
+      description: Creates a new order in the database
+      operationId: createOrder
+      tags:
+        - orders
+      requestBody:
+        description: Order to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreate"
+      responses:
+        "201":
+          description: ORder created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+              examples:
+                hazyWonderOrder:
+                  value:
+                    id: 909c2eb9-98bd-4c31-959e-6f239c13113a
+                    beerId: 550e8400-e29b-41d4-a716-446655440000
+                    userId: 542032df-5c14-4491-8e01-22c84b040f7d
+                    quantity: 4
+                    createdDate: "2022-01-02T14:30:00Z"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /orders/{orderId}:
+    parameters:
+      - $ref: "#/components/parameters/orderId"
+    get:
+      summary: Get an order by ID
+      description: Returns a single order by ID
+      operationId: getOrderById
+      tags:
+        - orders
+      responses:
+        "200":
+          description: Order found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+              examples:
+                hazyWonderOrder:
+                  value:
+                    id: 909c2eb9-98bd-4c31-959e-6f239c13113a
+                    beerId: 550e8400-e29b-41d4-a716-446655440000
+                    userId: 542032df-5c14-4491-8e01-22c84b040f7d
+                    quantity: 4
+                    createdDate: "2022-01-02T14:30:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      summary: Delete an order
+      description: Deletes an order from the database
+      operationId: deleteOrder
+      tags:
+        - orders
+      responses:
+        "204":
+          description: Order deleted successfully
+          content:
+            application/json:
+              schema: {}
+              examples:
+                hazyWonderOrder:
                   value: {}
                 midnightStout:
                   value: {}
