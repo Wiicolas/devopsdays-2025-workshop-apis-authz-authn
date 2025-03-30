@@ -1,5 +1,5 @@
 {
-  "name": "oauth2-api-resourceserver",
+  "name": "devopsbeerer-api",
   "version": "1.0.0",
   "description": "Example of resource server protected by OAuth2 protocol",
   "exports": "./index.js",
@@ -23,25 +23,25 @@
   "author": "Quentin RODIC",
   "license": "ISC",
   "dependencies": {
-    "@types/passport-jwt": "^4.0.1",
+    "cors": "^2.8.5",
     "express": "^5.0.1",
     "lowdb": "^7.0.1",
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
-    "passport-azure-ad": "^4.3.5",
     "passport-jwt": "^4.0.1",
     "passport-keycloak-bearer": "^2.4.1",
     "uuid": "^11.1.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/cors": "^2.8.17",
+    "@types/passport-jwt": "^4.0.1",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.9",
     "@types/passport": "^1.0.17",
-    "@types/passport-azure-ad": "^4.3.6",
-    "@types/winston": "^2.4.4",
     "concurrently": "^9.1.2",
     "eslint": "^9.21.0",
     "globals": "^16.0.0",

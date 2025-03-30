@@ -22,15 +22,13 @@ function UnauthorizedResponse(): Error {
 }
 
 function ForbiddenResponse(): Error {
-    const code: number = 401;
+    const code: number = 403;
     const message: string = "You don't have permission to access this resource";
 
     return { code, message } as Error;
 }
 
 export {
-    BadRequestResponse,
-    NotFoundResponse,
-    UnauthorizedResponse,
-    ForbiddenResponse
-}
+    BadRequestResponse, ForbiddenResponse, NotFoundResponse,
+    UnauthorizedResponse
+};

@@ -1,10 +1,15 @@
+import cors from 'cors';
+import dotenv from "dotenv";
 import express, { Express } from "express";
 import morgan from 'morgan';
 import passport from 'passport';
 import KeycloakBearerStrategy from 'passport-keycloak-bearer';
-import beers from './routes/beers.route.js';
-import { UnauthorizedResponse } from "./utils.js";
 import Error from "./models/error.js";
+import beers from './routes/beers.route.js';
+import orders from './routes/orders.route.js';
+import { UnauthorizedResponse } from "./utils.js";
+
+dotenv.config()
 
 const kcStrategy: KeycloakBearerStrategy = new KeycloakBearerStrategy({
     url: process.env.KEYCLOAK_URL!,
@@ -23,14 +28,35 @@ app.use((_, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        cors()(req, res, next);
+    } else {
+        next();
+    }
+});
 app.use(morgan('dev'));
 app.use(passport.initialize());
 passport.use(kcStrategy);
 
+// Health check endpoints for Kubernetes
+app.get('/health/liveness', (req: any, res: any) => {
+    res.status(200).json({ status: 'ok' });
+});
+
+app.get('/health/readiness', async (req: any, res: any) => {
+    try {
+        res.status(200).json({ status: 'ready' });
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(503).json({ status: 'not ready', error: errorMessage });
+    }
+});
 
 // Declare routes
 app.use('/v1.0.0/doc', express.static('./openapi.yaml'));
 app.use("/v1.0.0/beers", passport.authenticate('keycloak', { session: false, failWithError: true }), beers)
+app.use("/v1.0.0/orders", passport.authenticate('keycloak', { session: false, failWithError: true }), orders)
 
 app.use((err: any, req: any, res: any, next: any) => {
     if (err.name === 'AuthenticationError') {
