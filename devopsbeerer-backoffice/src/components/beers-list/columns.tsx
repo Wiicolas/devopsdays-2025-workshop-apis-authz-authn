@@ -1,27 +1,23 @@
 "use client"
 
+import Beer from "@/lib/models/beer"
 import { ColumnDef } from "@tanstack/react-table"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-    id: string
-    amount: number
-    status: "pending" | "processing" | "success" | "failed"
-    email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Beer>[] = [
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "name",
+        header: "Name",
     },
     {
-        accessorKey: "email",
-        header: "Email",
+        accessorKey: "style",
+        header: "Style",
     },
     {
-        accessorKey: "amount",
-        header: "Amount",
+        accessorKey: "quantity",
+        header: "Quantity",
+    },
+    {
+        accessorKey: "createdDate",
+        header: "Created",
     },
 ]
