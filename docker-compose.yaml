@@ -1,0 +1,83 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.0
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=keycloak
+      - KC_HEALTH_ENABLED=true
+      - KC_METRICS_ENABLED=true
+    command: 
+      - start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - app-network
+      
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./devopsbeerer-api
+      dockerfile: Dockerfile.dev
+    container_name: devopsbeerer-api
+    ports:
+      - "0.0.0.0:3000:3000"
+    volumes:
+      - ./devopsbeerer-api:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - KEYCLOAK_URL=http://localhost:8080
+      - KEYCLOAK_REALM=devopsbeerer-dev
+      - KEYCLOAK_AUDIENCE=devopsbeerer-api
+      - PORT=3000
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontoffice:
+    build:
+      context: ./devopsbeerer-frontoffice
+      dockerfile: Dockerfile.dev
+    container_name: devopsbeerer-frontoffice
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./devopsbeerer-frontoffice:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
