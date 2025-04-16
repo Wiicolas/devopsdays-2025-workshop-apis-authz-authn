@@ -2,49 +2,26 @@ import { auth } from "@/auth";
 import { columns } from "@/components/beers-list/columns";
 import { DataTable } from "@/components/beers-list/data-table";
 import { TopBar } from "@/components/top-bar";
-import { headers } from "next/headers";
+import { ListBeer, listBeers } from "@/lib/http-client/beers.api.client";
+import Beer from "@/lib/models/beer";
 
-type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export const payments: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-  {
-    id: "489e1d42",
-    amount: 125,
-    status: "processing",
-    email: "example@gmail.com",
-  },
-  // ...
-]
-
-async function getData(token: string | null): Promise<Payment[]> {
-
-  
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ]
+async function getData(token: string): Promise<Beer[]> {
+  try {
+    const response: ListBeer | null = await listBeers(token);
+    return response ? response.data : []
+  }
+  catch (e) {
+    return [];
+  }
 }
 
 export default async function Home() {
   const session = await auth()
 
-  const data = await getData("")
+  console.log("accessToken", session?.accessToken);
+
+
+  const data = await getData(session?.accessToken!)
 
   return (<>
     <TopBar />
