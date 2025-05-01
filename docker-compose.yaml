@@ -11,12 +11,16 @@ services:
       - KC_DB_PASSWORD=keycloak
       - KC_HEALTH_ENABLED=true
       - KC_METRICS_ENABLED=true
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm.json
     command: 
       - start-dev
+      - --import-realm
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - app-network
@@ -31,48 +35,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - app-network
 
-  api:
-    build:
-      context: ./devopsbeerer-api
-      dockerfile: Dockerfile.dev
-    container_name: devopsbeerer-api
-    ports:
-      - "0.0.0.0:3000:3000"
-    volumes:
-      - ./devopsbeerer-api:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - KEYCLOAK_URL=http://localhost:8080
-      - KEYCLOAK_REALM=devopsbeerer-dev
-      - KEYCLOAK_AUDIENCE=devopsbeerer-api
-      - PORT=3000
-    depends_on:
-      - keycloak
-    restart: unless-stopped
-    networks:
-      - app-network
-
-  frontoffice:
-    build:
-      context: ./devopsbeerer-frontoffice
-      dockerfile: Dockerfile.dev
-    container_name: devopsbeerer-frontoffice
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./devopsbeerer-frontoffice:/app
-      - /app/node_modules
-    depends_on:
-      - api
-    environment:
-      - NODE_ENV=development
-    restart: unless-stopped
-    networks:
-      - app-network
 
 networks:
   app-network:

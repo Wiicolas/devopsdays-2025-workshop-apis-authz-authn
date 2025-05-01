@@ -1,4 +1,4 @@
-FROM docker.io/node:23.11.0-slim@sha256:dfb18d8011c0b3a112214a32e772d9c6752131ffee512e974e59367e46fcee52
+FROM docker.io/node:23.11.0-slim
 
 WORKDIR /usr/app
 
@@ -6,8 +6,10 @@ COPY package*.json .
 
 RUN npm ci
 
-COPY . .
+COPY tsconfig.json* nodemon.json* *.json ./
 
-RUN printenv
+RUN apt-get -y update; apt-get -y install curl
+
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]

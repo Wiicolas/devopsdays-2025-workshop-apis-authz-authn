@@ -305,6 +305,7 @@
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
+      "devopsbeerer-backoffice": [],
       "broker": [
         {
           "id": "06790936-0e47-418e-8c63-76105e4f35fa",
@@ -753,6 +754,98 @@
       ]
     },
     {
+      "id": "801ce10b-8c30-4ac2-ad66-1cfeafc81b96",
+      "clientId": "devopsbeerer-backoffice",
+      "name": "DevOps Beerer Backoffice",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "http://localhost:5000/api/auth/callback/keycloak"
+      ],
+      "webOrigins": [
+        "http://localhost:5000",
+        "http://localhost:5000/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1744540743",
+        "backchannel.logout.session.required": "true",
+        "frontchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "display.on.consent.screen": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "d80d6bbe-c9a6-4612-b82c-5348846daa0f",
+          "name": "client roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "user.attribute": "foo",
+            "id.token.claim": "false",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "usermodel.clientRoleMapping.clientId": "devopsbeerer-api"
+          }
+        },
+        {
+          "id": "8765c389-169a-4e4f-9cca-4098104cbfcd",
+          "name": "devopsbeerer-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "devopsbeerer-api",
+            "id.token.claim": "false",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "Orders.Read.All",
+        "Orders.Read",
+        "Beers.Write",
+        "offline_access",
+        "Beers.Read",
+        "Orders.Write",
+        "Beers.Read.All"
+      ]
+    },
+    {
       "id": "7d68f522-85c7-4591-a16b-3e129e30d7ca",
       "clientId": "devopsbeerer-frontoffice-spa-devopsdays",
       "name": "Devops Days",
@@ -836,7 +929,6 @@
         "offline_access"
       ],
       "optionalClientScopes": [
-        "Beers.Write",
         "profile",
         "Beers.Read",
         "Beers.Read.All",
