@@ -9,9 +9,9 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  private readonly oidcSecurityService = inject(OidcSecurityService);
+  //private readonly oidcSecurityService = inject(OidcSecurityService);
 
   logout(): void {
-    this.oidcSecurityService.logoff().subscribe();
+    //this.oidcSecurityService.logoff().subscribe();
   }
 }

@@ -9,9 +9,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent implements OnDestroy {
-  private readonly securitService: OidcSecurityService = inject(OidcSecurityService);
+  //private readonly securitService: OidcSecurityService = inject(OidcSecurityService);
 
-  email: string = this.securitService.userData().userData.email;
+  email: string = "";//this.securitService.userData().userData.email;
 
   logoutSubscription: Subscription | null = null;
 
@@ -22,9 +22,9 @@ export class UserMenuComponent implements OnDestroy {
   }
 
   logout(): void {
-    this.logoutSubscription = this.securitService.logoff().subscribe(_ => {
+    /*this.logoutSubscription = this.securitService.logoff().subscribe(_ => {
       console.debug('Logged out successfully');
-    });
+    });*/
 
   }
 }
