@@ -6,7 +6,7 @@ const providers: Provider[] = [
     Keycloak({
         authorization: {
             params: {
-                scope: "openid email profile Beers.Read.All Beers.Read Beers.Write"
+                scope: "openid email profile"
             }
         }
     })
