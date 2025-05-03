@@ -3,10 +3,21 @@ import dotenv from "dotenv";
 import express, { Express } from "express";
 import morgan from 'morgan';
 import passport from 'passport';
+import KeycloakBearerStrategy from 'passport-keycloak-bearer';
+import Error from './models/error.js';
 import beers from './routes/beers.route.js';
 import orders from './routes/orders.route.js';
+import { UnauthorizedResponse } from './utils.js';
 
 dotenv.config()
+
+const kcStrategy: KeycloakBearerStrategy = new KeycloakBearerStrategy({
+    url: process.env.KEYCLOAK_URL!,
+    realm: process.env.KEYCLOAK_REALM || 'devopsbeerer',
+    audience: process.env.KEYCLOAK_AUDIENCE
+}, (jwtPayload, done) => {
+    return done(null, jwtPayload, jwtPayload);
+});
 
 const app: Express = express()
 
@@ -26,6 +37,7 @@ app.use((req, res, next) => {
 });
 app.use(morgan('dev'));
 app.use(passport.initialize());
+passport.use(kcStrategy);
 
 // Health check endpoints for Kubernetes
 app.get('/health/liveness', (req: any, res: any) => {
@@ -43,10 +55,15 @@ app.get('/health/readiness', async (req: any, res: any) => {
 
 // Declare routes
 app.use('/v1.0.0/doc', express.static('./openapi.yaml'));
-app.use("/v1.0.0/beers", beers)
-app.use("/v1.0.0/orders", orders)
+app.use("/v1.0.0/beers", passport.authenticate('keycloak', { session: false, failWithError: true }), beers)
+app.use("/v1.0.0/orders", passport.authenticate('keycloak', { session: false, failWithError: true }), orders)
 
 app.use((err: any, req: any, res: any, next: any) => {
+    if (err.name === 'AuthenticationError') {
+        const error: Error = UnauthorizedResponse();
+        return res.status(error.code).json(error);
+    }
+
     return res.status(err.status || 500).json({
         error: err.name || 'Internal Server Error',
         message: err.message || 'An unexpected error occurred'
