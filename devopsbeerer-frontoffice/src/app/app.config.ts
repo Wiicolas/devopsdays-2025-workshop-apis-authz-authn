@@ -1,8 +1,8 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { StsConfigHttpLoader } from 'angular-auth-oidc-client';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor, provideAuth, StsConfigHttpLoader, StsConfigLoader, withAppInitializerAuthCheck } from 'angular-auth-oidc-client';
 import { map } from 'rxjs';
 import { routes } from './app.routes';
 import { DynamicConfigurationService } from './core/services/dynamic-configuration.service';
@@ -46,5 +46,15 @@ function initializeAuthentication(httpClient: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
   provideAppInitializer(initializeAppConfig),
-  provideHttpClient(withInterceptorsFromDi())]
+  provideHttpClient(withInterceptorsFromDi()),
+  provideAuth({
+    loader: {
+      provide: StsConfigLoader,
+      useFactory: initializeAuthentication,
+      deps: [HttpClient],
+    }
+  },
+    withAppInitializerAuthCheck()),
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },]
+
 };
