@@ -14,7 +14,7 @@ const router = Router();
 const db = await JSONFilePreset<{ orders: Order[] }>('orders.db.json', { orders: [] });
 
 
-router.get('', requireScope("Orders.Read.All"), async (req: Request, res: Response) => {
+router.get('', async (req: Request, res: Response) => {
     await db.read();
     const orders: Order[] = db.data.orders;
 
@@ -27,14 +27,14 @@ router.get('', requireScope("Orders.Read.All"), async (req: Request, res: Respon
 })
 
 
-router.post('', requireScope("Orders.Write"), requireRole('admin'), async (req: Request, res: Response) => {
+router.post('', async (req: Request, res: Response) => {
     const body: OrderCreate = req.body as OrderCreate;
     const order: Order = { ...body, createdDate: (new Date()), id: randomUUID(), status: "CREATED" };
     await db.update(({ orders }) => orders.push(order));
     res.status(200).json(order);
 })
 
-router.get('/:id', requireScope("Orders.Read"), async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
 
@@ -51,7 +51,7 @@ router.get('/:id', requireScope("Orders.Read"), async (req: Request, res: Respon
     res.status(200).json(order);
 })
 
-router.patch('/:id', requireScope("Orders.Write"), requireRole('admin'), async (req: Request, res: Response) => {
+router.patch('/:id', async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
     const currentUser = req.authInfo!; // The authenticated user from passport
@@ -82,7 +82,7 @@ router.patch('/:id', requireScope("Orders.Write"), requireRole('admin'), async (
     res.status(200).send(updatedOrder);
 })
 
-router.delete('/:id', requireScope("Orders.Write"), requireRole('admin'), async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
     const currentUser = req.authInfo!; // The authenticated user from passport
