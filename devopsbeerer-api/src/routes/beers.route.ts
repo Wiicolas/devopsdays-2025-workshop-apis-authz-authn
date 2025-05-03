@@ -26,7 +26,7 @@ router.get('', async (req: Request, res: Response) => {
     );
 })
 
-router.post('', async (req: Request, res: Response) => {
+router.post('', requireRole('admin'), async (req: Request, res: Response) => {
     const body: BeerCreate = req.body as BeerCreate;
     const beer: Beer = { ...body, createdDate: (new Date()), updatedDate: new Date(), id: randomUUID() };
     await db.update(({ beers }) => beers.push(beer));
@@ -50,7 +50,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.status(200).json(beer);
 })
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', requireRole('admin'), async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
     const currentUser = req.authInfo!; // The authenticated user from passport
