@@ -1,5 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,9 +8,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './user-menu.component.scss'
 })
 export class UserMenuComponent implements OnDestroy {
-  private readonly securitService: OidcSecurityService = inject(OidcSecurityService);
+  //private readonly securitService: OidcSecurityService = inject(OidcSecurityService);
 
-  email: string = this.securitService.userData().userData.email;
+  email: string = "no.connected" //this.securitService.userData().userData.email;
 
   logoutSubscription: Subscription | null = null;
 
@@ -22,9 +21,8 @@ export class UserMenuComponent implements OnDestroy {
   }
 
   logout(): void {
-    this.logoutSubscription = this.securitService.logoff().subscribe(_ => {
+    /*this.logoutSubscription = this.securitService.logoff().subscribe(_ => {
       console.debug('Logged out successfully');
-    });
-
+    });*/
   }
 }

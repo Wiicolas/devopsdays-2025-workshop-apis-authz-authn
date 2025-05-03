@@ -1,8 +1,8 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AuthInterceptor, provideAuth, StsConfigHttpLoader, StsConfigLoader, withAppInitializerAuthCheck } from 'angular-auth-oidc-client';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { StsConfigHttpLoader } from 'angular-auth-oidc-client';
 import { map } from 'rxjs';
 import { routes } from './app.routes';
 import { DynamicConfigurationService } from './core/services/dynamic-configuration.service';
@@ -28,7 +28,7 @@ function initializeAuthentication(httpClient: HttpClient) {
           postLogoutRedirectUri: customConfig.postLogoutRedirectUri,
           clientId: customConfig.clientId,
           secureRoutes: customConfig.secureRoutes,
-          scope: "openid profile email offline_access Beers.Read.All Beers.Read",
+          scope: "openid profile email offline_access",
           responseType: "code",
           silentRenew: true,
           useRefreshToken: true,
@@ -46,14 +46,5 @@ function initializeAuthentication(httpClient: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
   provideAppInitializer(initializeAppConfig),
-  provideHttpClient(withInterceptorsFromDi()),
-  provideAuth({
-    loader: {
-      provide: StsConfigLoader,
-      useFactory: initializeAuthentication,
-      deps: [HttpClient],
-    }
-  },
-    withAppInitializerAuthCheck()),
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },]
+  provideHttpClient(withInterceptorsFromDi())]
 };
