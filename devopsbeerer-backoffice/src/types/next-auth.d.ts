@@ -17,5 +17,6 @@ declare module "next-auth" {
     idToken?: string
     roles: string[]
     expiresAt: number
+    error?: string
   }
 }

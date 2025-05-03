@@ -1,4 +1,4 @@
-import { signIn, auth, providerMap } from "@/auth"
+import { providerMap, signIn } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { AuthError } from "next-auth"

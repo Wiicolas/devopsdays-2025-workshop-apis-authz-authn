@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Beer } from "lucide-react";
 
-export async function TopBar({ ...props }: any) {
+export async function TopBar() {
     const session = await auth()
 
     return (

@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import type { Provider } from "next-auth/providers"
 import Keycloak from "next-auth/providers/keycloak"
+import { jwtDecode } from "jwt-decode"
 
 const providers: Provider[] = [
     Keycloak({
@@ -19,53 +20,97 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return !!auth
         },
         async jwt({ token, account }) {
-
             if (account) {
+                const decodedToken = jwtDecode(account.access_token!);
+                console.log("New account login, setting initial token", {
+                    exp: decodedToken.exp,
+                    current_time: Math.floor(Date.now() / 1000)
+                });
                 return {
                     ...token,
                     accessToken: account.access_token,
                     refreshToken: account.refresh_token,
-                    expiresAt: account.expires_at ? account.expires_at * 1000 : 0
+                    exp: decodedToken.exp
                 }
             }
 
-            if (token.expiresAt && Date.now() < token.exp!) {
+            // Ensure we're comparing timestamps in the same format (seconds)
+            const currentTime = Math.floor(Date.now());
+            const tokenExp = typeof token.exp === 'number' ? token.exp : 0;
+
+            console.log("Checking token expiration", {
+                token_exp: tokenExp,
+                current_time: currentTime,
+                is_expired: currentTime > tokenExp,
+                difference_seconds: tokenExp - currentTime
+            });
+
+            // Return previous token if the access token has not expired yet
+            if (tokenExp && currentTime < tokenExp) {
                 return token
             }
 
-            if (token.refreshToken) {
-                try {
-                    const refreshedTokens = await refreshAccessToken(token.refreshToken as string)
+            // Add a guard to prevent refresh loops
+            const lastRefresh = token.lastRefresh as number || 0;
+            const minRefreshInterval = 10; // minimum seconds between refresh attempts
 
-                    return {
-                        ...token,
-                        accessToken: refreshedTokens.access_token,
-                        refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-                        expiresAt: refreshedTokens.expires_at ? refreshedTokens.expires_at * 1000 : 0,
-                    }
-                } catch (error) {
-                    console.error("Error refreshing access token", error)
+            if (currentTime - lastRefresh < minRefreshInterval) {
+                console.log("Skipping refresh - too soon since last refresh");
+                return token;
+            }
 
-                    return {
-                        ...token,
-                        error: "RefreshAccessTokenError"
-                    }
+            // Token has expired
+            if (!token.refreshToken) {
+                console.log("No refresh token available, marking as expired");
+                return {
+                    ...token,
+                    error: "TokenExpired"
                 }
             }
 
-            return {
-                ...token,
-                error: "TokenExpired"
+            // Access token has expired, try to refresh it
+            try {
+                const refreshedTokens = await refreshAccessToken(token.refreshToken as string)
+                const decodedNewToken = jwtDecode(refreshedTokens.access_token);
+
+                console.log("Token refreshed successfully", {
+                    new_exp: decodedNewToken.exp,
+                    current_time: Math.floor(Date.now() / 1000)
+                });
+
+                return {
+                    ...token,
+                    accessToken: refreshedTokens.access_token,
+                    refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+                    exp: decodedNewToken.exp,
+                    lastRefresh: Math.floor(Date.now() / 1000),
+                    error: undefined // Clear any previous errors
+                }
+            } catch (error) {
+                console.error("Error refreshing access token", error)
+                return {
+                    ...token,
+                    error: "RefreshAccessTokenError"
+                }
             }
         },
         async session({ session, token }) {
-            session.accessToken = token.accessToken as string
+            console.log("Setting session from token", {
+                has_error: !!token.error,
+                error_type: token.error,
+                token_exp: token.exp,
+                current_time: Math.floor(Date.now() / 1000)
+            });
+
+            session.accessToken = token.accessToken as string;
+            session.error = token.error as string || '';
             return session
         }
     },
     pages: {
         signIn: "/signin",
     },
+    trustHost: true,
 })
 
 export const providerMap = providers
@@ -78,6 +123,7 @@ export const providerMap = providers
         }
     })
     .filter((provider) => provider.id !== "credentials")
+
 
 async function refreshAccessToken(refreshToken: string) {
     try {
@@ -101,9 +147,6 @@ async function refreshAccessToken(refreshToken: string) {
         if (!response.ok) {
             throw refreshedTokens
         }
-
-        // Calculate new expiration time
-        refreshedTokens.expires_at = Math.floor(Date.now() / 1000) + refreshedTokens.expires_in
 
         return refreshedTokens
     } catch (error) {

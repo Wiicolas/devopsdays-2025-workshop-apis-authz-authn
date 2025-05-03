@@ -27,7 +27,7 @@ router.get('', requireScope("Beers.Read.All"), async (req: Request, res: Respons
 
 router.post('', requireScope("Beers.Write"), async (req: Request, res: Response) => {
     const currentUser = req.authInfo!; // The authenticated user from passport
-    const isAdmin = currentUser.roles && currentUser.roles.includes('Admin');
+    const isAdmin = currentUser.roles && currentUser.roles.includes('admin');
 
     if (!isAdmin) {
         const error: Error = ForbiddenResponse();
@@ -74,9 +74,11 @@ router.delete('/:id', requireScope("Beers.Write"), async (req: Request, res: Res
     }
 
     // Check if user is admin or the original author
-    const isAdmin = currentUser.roles && currentUser.roles.includes('Admin');
+    const isAdmin = currentUser.roles && currentUser.roles.includes('admin');
 
     if (!isAdmin) {
+        console.log("You are not admin");
+        
         const error: Error = ForbiddenResponse();
         res.status(error.code).json(error);
         return;

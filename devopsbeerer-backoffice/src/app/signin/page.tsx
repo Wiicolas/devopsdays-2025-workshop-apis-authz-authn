@@ -1,10 +1,8 @@
-import { Beer, GalleryVerticalEnd } from "lucide-react"
+import { Beer } from "lucide-react"
 
 import { LoginForm } from "@/components/login-form"
 
-export default async function SignInPage(props: {
-  searchParams: { callbackUrl: string | undefined }
-}) {
+export default async function SignInPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -18,7 +16,7 @@ export default async function SignInPage(props: {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <LoginForm  />
+            <LoginForm />
           </div>
         </div>
       </div>
