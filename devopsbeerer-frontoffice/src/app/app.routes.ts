@@ -5,7 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
-    { path: "", component: HomeComponent, canActivate: [autoLoginPartialRoutesGuard] },
+    { path: "", component: HomeComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'callback', component: CallbackComponent }
 ];
