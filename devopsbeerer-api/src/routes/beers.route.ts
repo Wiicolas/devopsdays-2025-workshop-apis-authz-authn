@@ -1,11 +1,12 @@
 import { randomUUID } from "crypto";
 import { Request, Response, Router } from "express";
 import { JSONFilePreset } from 'lowdb/node';
-import BeerCreate from "src/models/beer-create.js";
+import requireRole from "../middlewares/require-role.js";
+import BeerCreate from "../models/beer-create.js";
 import requireScope from "../middlewares/require-scope.js";
 import Beer from "../models/beer.js";
 import Error from "../models/error.js";
-import { ForbiddenResponse, NotFoundResponse } from "../utils.js";
+import { NotFoundResponse } from "../utils.js";
 
 const router = Router();
 const db = await JSONFilePreset<{ beers: Beer[] }>('db.json', { beers: [] });
@@ -25,16 +26,7 @@ router.get('', requireScope("Beers.Read.All"), async (req: Request, res: Respons
     );
 })
 
-router.post('', requireScope("Beers.Write"), async (req: Request, res: Response) => {
-    const currentUser = req.authInfo!; // The authenticated user from passport
-    const isAdmin = currentUser.roles && currentUser.roles.includes('admin');
-
-    if (!isAdmin) {
-        const error: Error = ForbiddenResponse();
-        res.status(error.code).json(error);
-        return;
-    }
-
+router.post('', requireScope("Beers.Write"), requireRole('admin'), async (req: Request, res: Response) => {
     const body: BeerCreate = req.body as BeerCreate;
     const beer: Beer = { ...body, createdDate: (new Date()), updatedDate: new Date(), id: randomUUID() };
     await db.update(({ beers }) => beers.push(beer));
@@ -58,7 +50,7 @@ router.get('/:id', requireScope("Beers.Read"), async (req: Request, res: Respons
     res.status(200).json(beer);
 })
 
-router.delete('/:id', requireScope("Beers.Write"), async (req: Request, res: Response) => {
+router.delete('/:id', requireScope("Beers.Write"), requireRole('admin'), async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
     const currentUser = req.authInfo!; // The authenticated user from passport
@@ -69,17 +61,6 @@ router.delete('/:id', requireScope("Beers.Write"), async (req: Request, res: Res
 
     if (!beer) {
         const error: Error = NotFoundResponse();
-        res.status(error.code).json(error);
-        return;
-    }
-
-    // Check if user is admin or the original author
-    const isAdmin = currentUser.roles && currentUser.roles.includes('admin');
-
-    if (!isAdmin) {
-        console.log("You are not admin");
-        
-        const error: Error = ForbiddenResponse();
         res.status(error.code).json(error);
         return;
     }
