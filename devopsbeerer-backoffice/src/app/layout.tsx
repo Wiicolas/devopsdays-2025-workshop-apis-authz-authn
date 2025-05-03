@@ -32,7 +32,7 @@ export default async function RootLayout({
       >
         <SessionProvider session={session}>
           <SessionCheck />
-          <TopBar />
+          { session?.accessToken && (<TopBar />)}
           {children}
         </SessionProvider>
       </body>
