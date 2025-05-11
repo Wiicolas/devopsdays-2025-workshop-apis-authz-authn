@@ -1,0 +1,20 @@
+<app-layout>
+    <div class="banner">
+        <div class="information">Une bière irrésistible !</div>
+    </div>
+    <div class="wrapper">
+        @if (beers$ | async; as beersResponse) {
+        @if (beersResponse.code !== 200) {
+        <app-error-box [apiError]="beersResponse"></app-error-box>
+        }
+        @else {
+        <div class="beer-list">
+            @for (beer of beersResponse.data.data; track beer.id) {
+            <app-beer-card [beer]="beer">
+            </app-beer-card>
+            }
+        </div>
+        }
+        }
+    </div>
+</app-layout>

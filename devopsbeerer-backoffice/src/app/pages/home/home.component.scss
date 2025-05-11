@@ -1,0 +1,55 @@
+.banner {
+    border-top: 8px solid var(--secondary-light-color);
+    border-bottom: 8px solid var(--secondary-light-color);
+    background-image: url("../../../../public/assets/beer-background.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    position: relative;
+
+    .information {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 20px;
+        height: 60px;
+        line-height: 60px;
+        width: 400px;
+        max-width: 100%;
+        text-align: center;
+        font-size: 36px;
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        margin-inline: auto;
+        border-radius: 4px;
+    }
+}
+
+
+.wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+
+    .beer-list {
+        position: absolute;
+        margin-inline: auto;
+        top: -100px;
+        left: 0;
+        right: 0;
+        width: 850px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    app-error-box {
+        position: absolute;
+        margin-inline: auto;
+        top: -100px;
+        left: 0;
+        right: 0;
+        width: 850px;
+    }
+}

@@ -28,7 +28,7 @@ function initializeAuthentication(httpClient: HttpClient) {
           postLogoutRedirectUri: customConfig.postLogoutRedirectUri,
           clientId: customConfig.clientId,
           secureRoutes: customConfig.secureRoutes,
-          scope: "openid profile email offline_access Beers.Read.All Beers.Read",
+          scope: "openid profile email offline_access Beers.Read.All Beers.Read Beers.Write",
           responseType: 'code',
           checkSessionIntervalInSeconds: 3,
           sessionChecksEnabled: true,
