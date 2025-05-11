@@ -11,7 +11,7 @@ import { NotFoundResponse } from "../utils.js";
 const router = Router();
 const db = await JSONFilePreset<{ beers: Beer[] }>('db.json', { beers: [] });
 
-router.get('', async (req: Request, res: Response) => {
+router.get('', requireScope('Beers.Read.All'), async (req: Request, res: Response) => {
     const isAvailableFiltering: string | undefined = req.query.isAvailable as string | undefined
 
     await db.read();
@@ -26,14 +26,14 @@ router.get('', async (req: Request, res: Response) => {
     );
 })
 
-router.post('', requireRole('admin'), async (req: Request, res: Response) => {
+router.post('', requireScope('Beers.Write'), requireRole('admin'), async (req: Request, res: Response) => {
     const body: BeerCreate = req.body as BeerCreate;
     const beer: Beer = { ...body, createdDate: (new Date()), updatedDate: new Date(), id: randomUUID() };
     await db.update(({ beers }) => beers.push(beer));
     res.status(200).json(beer);
 })
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', requireScope('Beers.Read'), async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
 
@@ -50,7 +50,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.status(200).json(beer);
 })
 
-router.delete('/:id', requireRole('admin'), async (req: Request, res: Response) => {
+router.delete('/:id',requireScope('Beers.Write'), requireRole('admin'), async (req: Request, res: Response) => {
     const params = req.params;
     const id: string = params["id"];
     const currentUser = req.authInfo!; // The authenticated user from passport
