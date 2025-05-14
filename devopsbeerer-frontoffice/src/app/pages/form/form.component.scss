@@ -1,0 +1,96 @@
+.banner {
+    border-top: 8px solid var(--secondary-light-color);
+    border-bottom: 8px solid var(--secondary-light-color);
+    background-image: url("../../../../public/assets/beer-background.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    position: relative;
+
+    .information {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 20px;
+        height: 60px;
+        line-height: 60px;
+        width: 400px;
+        max-width: 100%;
+        text-align: center;
+        font-size: 36px;
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        margin-inline: auto;
+        border-radius: 4px;
+    }
+}
+
+
+.wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+
+    main {
+        position: absolute;
+        margin-inline: auto;
+        top: -100px;
+        left: 0;
+        right: 0;
+        width: 850px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: var(--secondary-light-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        padding: 1em;
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+
+            input {
+                background-color: #45434f;
+                border: 0;
+                border-radius: 0.33em;
+                height: 32px;
+                padding: 0 1em;
+                color: white;
+            }
+        }
+
+        .input-flex {
+            display: flex;
+            gap: 16px;
+
+            .input-container {
+                flex: 1;
+            }
+        }
+
+        .input-control {
+            display: flex;
+            justify-content: center;
+
+            input {
+                height: 42px;
+                background-color: var(--primary-color);
+                border: 0;
+                color: var(--secondary-color);
+                padding: 0 1em;
+                border-radius: 0.33em;
+                cursor: pointer;
+            }
+        }
+    }
+}

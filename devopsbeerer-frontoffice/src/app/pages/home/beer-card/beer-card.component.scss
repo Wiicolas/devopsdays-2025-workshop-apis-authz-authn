@@ -6,11 +6,24 @@
     overflow: hidden;
     background-color: var(--secondary-light-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    padding: 0.3em 1em;
+    border-radius: 0.33em;
+    transition: background-color 0.2s ease;
+    background-color: var(--secondary-color);
+    border: 0;
+    color: white;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+        background-color: var(--action-color);
     }
 }
 
