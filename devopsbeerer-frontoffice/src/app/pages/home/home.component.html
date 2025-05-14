@@ -7,11 +7,13 @@
         @if (beersResponse.code !== 200) {
         <app-error-box [apiError]="beersResponse"></app-error-box>
         }
+        @else if(error) {
+        <app-error-box [apiError]="error" message=""></app-error-box>
+        }
         @else {
         <div class="beer-list">
             @for (beer of beersResponse.data.data; track beer.id) {
-            <app-beer-card [beer]="beer">
-            </app-beer-card>
+            <app-beer-card [beer]="beer" (deleteBeer)="deleteBeer($event)"></app-beer-card>
             }
         </div>
         }
