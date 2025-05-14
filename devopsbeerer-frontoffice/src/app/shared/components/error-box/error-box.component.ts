@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, Signal } from '@angular/core';
 import { IApiResponse } from '../../../core/models/internal/api-response.model';
 
 @Component({
@@ -9,6 +9,7 @@ import { IApiResponse } from '../../../core/models/internal/api-response.model';
 })
 export class ErrorBoxComponent {
   apiError = input.required<IApiResponse<any>>();
+  message = input<string>("access");  
 
   apiErrorTitle = computed<string>(() => {
     const code: number = this.apiError().code;
@@ -17,6 +18,10 @@ export class ErrorBoxComponent {
         return "Unauthorized"
       case 403:
         return "Forbidden"
+      case 200:
+        return "OK"
+      case 204:
+        return "No Content"
     }
 
     return "NaN"
