@@ -1,0 +1,24 @@
+<app-layout>
+    <div class="banner">
+        <div class="information">Une bière irrésistible !</div>
+    </div>
+    <div class="wrapper">
+        <main>
+            <div class="token">
+                <h1>My token</h1>
+                <h2>ID token</h2>
+                <p>
+                    @if (idToken$ | async; as idToken) {
+                    <app-json-viewer [jsonData]="idToken"></app-json-viewer>
+                    }
+                </p>
+                <h2>Acess Token</h2>
+                <p>
+                    @if (accessToken$ | async; as accessToken) {
+                    <app-json-viewer [jsonData]="accessToken"></app-json-viewer>
+                    }
+                </p>
+            </div>
+        </main>
+    </div>
+</app-layout>
