@@ -22,7 +22,7 @@ export class UserMenuComponent implements OnDestroy {
   }
 
   logout(): void {
-    this.logoutSubscription = this.securitService.logoff().subscribe(_ => {
+    this.logoutSubscription = this.securitService.logoffAndRevokeTokens().subscribe(_ => {
       console.debug('Logged out successfully');
     });
   }

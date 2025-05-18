@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IBeer } from '../../../core/models/internal/beer.model';
 
 @Component({
@@ -9,4 +9,11 @@ import { IBeer } from '../../../core/models/internal/beer.model';
 })
 export class BeerCardComponent {
   @Input() beer!: IBeer;
+
+  @Output()
+  deleteBeer: EventEmitter<string> = new EventEmitter<string>();
+
+  onDeleteBeer(): void {
+    this.deleteBeer.emit(this.beer.id);
+  }
 }
