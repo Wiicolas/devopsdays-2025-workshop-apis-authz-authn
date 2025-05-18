@@ -154,8 +154,8 @@
             "client": {
               "realm-management": [
                 "view-realm",
-                "manage-events",
                 "manage-authorization",
+                "manage-events",
                 "manage-realm",
                 "query-clients",
                 "query-users",
@@ -167,8 +167,8 @@
                 "view-clients",
                 "query-realms",
                 "view-events",
-                "view-users",
                 "manage-identity-providers",
+                "view-users",
                 "manage-users",
                 "create-client"
               ]
@@ -306,6 +306,7 @@
       "admin-cli": [],
       "account-console": [],
       "devopsbeerer-backoffice": [],
+      "devopsbeerer-frontoffice": [],
       "broker": [
         {
           "id": "06790936-0e47-418e-8c63-76105e4f35fa",
@@ -337,7 +338,6 @@
           "attributes": {}
         }
       ],
-      "devopsbeerer-frontoffice-webapp-postman": [],
       "account": [
         {
           "id": "f16d55ca-438b-4231-85c9-464907b1e3ee",
@@ -425,8 +425,7 @@
           "containerId": "15031c59-bb87-4434-84e2-803fd1714f3e",
           "attributes": {}
         }
-      ],
-      "devopsbeerer-frontoffice-spa-devopsdays": []
+      ]
     }
   },
   "groups": [],
@@ -629,7 +628,8 @@
       "protocol": "openid-connect",
       "attributes": {
         "realm_client": "false",
-        "client.use.lightweight.access.token.enabled": "true"
+        "client.use.lightweight.access.token.enabled": "true",
+        "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
@@ -671,7 +671,8 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
-        "realm_client": "true"
+        "realm_client": "true",
+        "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
@@ -727,6 +728,7 @@
         "client.secret.creation.time": "1743338138",
         "backchannel.logout.session.required": "true",
         "frontchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
@@ -765,22 +767,21 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
       "redirectUris": [
-        "http://localhost:5000/api/auth/callback/keycloak"
+        "http://localhost:4201/callback"
       ],
       "webOrigins": [
-        "http://localhost:5000",
-        "http://localhost:5000/*"
+        "http://localhost:4201",
+        "http://localhost:4201/*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
-      "consentRequired": false,
+      "consentRequired": true,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
       "serviceAccountsEnabled": false,
-      "publicClient": false,
+      "publicClient": true,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
@@ -788,7 +789,9 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1744540743",
         "backchannel.logout.session.required": "true",
+        "standard.token.exchange.enabled": "false",
         "frontchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
@@ -826,8 +829,9 @@
             "included.client.audience": "devopsbeerer-api",
             "id.token.claim": "false",
             "lightweight.claim": "false",
+            "introspection.token.claim": "true",
             "access.token.claim": "true",
-            "introspection.token.claim": "true"
+            "userinfo.token.claim": "false"
           }
         }
       ],
@@ -836,18 +840,14 @@
         "email"
       ],
       "optionalClientScopes": [
-        "Orders.Read.All",
-        "Orders.Read",
         "Beers.Write",
-        "offline_access",
         "Beers.Read",
-        "Orders.Write",
         "Beers.Read.All"
       ]
     },
     {
       "id": "7d68f522-85c7-4591-a16b-3e129e30d7ca",
-      "clientId": "devopsbeerer-frontoffice-spa-devopsdays",
+      "clientId": "devopsbeerer-frontoffice",
       "name": "Devops Days",
       "description": "",
       "rootUrl": "",
@@ -858,18 +858,15 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "http://localhost:4200/callback",
-        "https://web.dev.devopsbeerer.ch/callback"
+        "http://localhost:4200/callback"
       ],
       "webOrigins": [
-        "https://web.dev.devopsbeerer.ch/*",
         "http://localhost:4200/*",
-        "https://web.dev.devopsbeerer.ch",
         "http://localhost:4200"
       ],
       "notBefore": 0,
       "bearerOnly": false,
-      "consentRequired": false,
+      "consentRequired": true,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
@@ -881,8 +878,9 @@
         "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "backchannel.logout.session.required": "true",
+        "standard.token.exchange.enabled": "false",
         "frontchannel.logout.session.required": "true",
-        "post.logout.redirect.uris": "http://localhost:4200##https://web.dev.devopsbeerer.ch",
+        "post.logout.redirect.uris": "http://localhost:4200",
         "oauth2.device.authorization.grant.enabled": "false",
         "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
@@ -901,8 +899,9 @@
             "included.client.audience": "devopsbeerer-api",
             "id.token.claim": "false",
             "lightweight.claim": "false",
+            "introspection.token.claim": "true",
             "access.token.claim": "true",
-            "introspection.token.claim": "true"
+            "userinfo.token.claim": "false"
           }
         },
         {
@@ -925,95 +924,12 @@
           }
         }
       ],
-      "defaultClientScopes": [
-        "offline_access"
-      ],
+      "defaultClientScopes": [],
       "optionalClientScopes": [
         "profile",
         "Beers.Read",
         "Beers.Read.All",
         "email"
-      ]
-    },
-    {
-      "id": "12b24616-0c60-483e-8dbf-68802a77aed8",
-      "clientId": "devopsbeerer-frontoffice-webapp-postman",
-      "name": "",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "https://oauth.pstmn.io/v1/callback"
-      ],
-      "webOrigins": [
-        "https://oauth.pstmn.io"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "oidc.ciba.grant.enabled": "false",
-        "backchannel.logout.session.required": "true",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "8f765af9-f436-4f0a-8e36-3a678cee74e0",
-          "name": "client roles",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-client-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "introspection.token.claim": "true",
-            "multivalued": "true",
-            "userinfo.token.claim": "false",
-            "user.attribute": "foo",
-            "id.token.claim": "false",
-            "lightweight.claim": "false",
-            "access.token.claim": "true",
-            "claim.name": "roles",
-            "jsonType.label": "String",
-            "usermodel.clientRoleMapping.clientId": "devopsbeerer-api"
-          }
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "basic",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "Orders.Read.All",
-        "address",
-        "Orders.Read",
-        "Beers.Write",
-        "phone",
-        "offline_access",
-        "organization",
-        "Beers.Read",
-        "microprofile-jwt",
-        "Orders.Write",
-        "Beers.Read.All"
       ]
     },
     {
@@ -1037,7 +953,8 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
-        "realm_client": "true"
+        "realm_client": "true",
+        "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
@@ -1147,12 +1064,13 @@
           "protocolMapper": "oidc-organization-membership-mapper",
           "consentRequired": false,
           "config": {
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "organization",
-            "jsonType.label": "String",
-            "multivalued": "true"
+            "jsonType.label": "String"
           }
         }
       ]
@@ -1240,6 +1158,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1361,8 +1280,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "AUTH_TIME",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "auth_time",
             "jsonType.label": "long"
@@ -1399,8 +1319,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientHost",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
@@ -1414,8 +1335,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientAddress",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
             "jsonType.label": "String"
@@ -1429,8 +1351,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "client_id",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "client_id",
             "jsonType.label": "String"
@@ -1457,7 +1380,8 @@
           "config": {
             "id.token.claim": "true",
             "access.token.claim": "true",
-            "introspection.token.claim": "true"
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true"
           }
         }
       ]
@@ -1947,14 +1871,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "oidc-full-name-mapper",
-            "oidc-address-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-property-mapper",
-            "saml-role-list-mapper"
+            "oidc-usermodel-property-mapper",
+            "oidc-address-mapper",
+            "saml-role-list-mapper",
+            "oidc-full-name-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper"
           ]
         }
       },
@@ -2013,14 +1937,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-property-mapper",
+            "oidc-address-mapper",
             "oidc-full-name-mapper",
             "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-address-mapper",
-            "oidc-usermodel-attribute-mapper",
             "oidc-usermodel-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper"
           ]
         }
       }
@@ -2813,8 +2737,8 @@
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DevicePollingInterval": "5",
     "clientOfflineSessionMaxLifespan": "0",
+    "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
@@ -2826,7 +2750,7 @@
     "frontendUrl": "",
     "acr.loa.map": "{}"
   },
-  "keycloakVersion": "26.1.4",
+  "keycloakVersion": "26.2.0",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
