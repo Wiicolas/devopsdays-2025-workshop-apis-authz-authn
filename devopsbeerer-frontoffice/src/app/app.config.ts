@@ -2,10 +2,11 @@ import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDete
 import { provideRouter } from '@angular/router';
 
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AuthInterceptor, LogLevel, provideAuth, StsConfigHttpLoader, StsConfigLoader, withAppInitializerAuthCheck } from 'angular-auth-oidc-client';
+import { AbstractSecurityStorage, AuthInterceptor, LogLevel, provideAuth, StsConfigHttpLoader, StsConfigLoader, withAppInitializerAuthCheck } from 'angular-auth-oidc-client';
 import { map } from 'rxjs';
 import { routes } from './app.routes';
 import { DynamicConfigurationService } from './core/services/dynamic-configuration.service';
+import { AuthStorageService } from './core/services/auth-storage.service';
 
 /**
  * Factory function for loading configuration during app initialization
@@ -34,7 +35,7 @@ function initializeAuthentication(httpClient: HttpClient) {
           sessionChecksEnabled: true,
           historyCleanupOff: true,
           silentRenew: true,
-          useRefreshToken: true,
+          useRefreshToken: true
         };
       })
     )
@@ -53,6 +54,7 @@ export const appConfig: ApplicationConfig = {
     }
   },
     withAppInitializerAuthCheck()),
+  { provide: AbstractSecurityStorage, useClass: AuthStorageService },
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },]
 
 };
