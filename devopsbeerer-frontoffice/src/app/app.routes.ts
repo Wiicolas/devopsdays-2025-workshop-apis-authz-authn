@@ -7,7 +7,7 @@ import { FormComponent } from './pages/form/form.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, canActivate: [autoLoginPartialRoutesGuard] },
-    { path: "form", component: FormComponent },
+    { path: "form", component: FormComponent, canActivate: [autoLoginPartialRoutesGuard]  },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'callback', component: CallbackComponent }
 ];
