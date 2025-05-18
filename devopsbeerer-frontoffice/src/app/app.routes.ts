@@ -4,10 +4,12 @@ import { CallbackComponent } from './callback/callback.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { FormComponent } from './pages/form/form.component';
+import { TokenViewComponent } from './pages/token-view/token-view.component';
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, canActivate: [autoLoginPartialRoutesGuard] },
-    { path: "form", component: FormComponent, canActivate: [autoLoginPartialRoutesGuard]  },
+    { path: "form", component: FormComponent, canActivate: [autoLoginPartialRoutesGuard] },
+    { path: "token", component: TokenViewComponent, canActivate: [autoLoginPartialRoutesGuard] },
     { path: 'unauthorized', component: UnauthorizedComponent },
     { path: 'callback', component: CallbackComponent }
 ];
