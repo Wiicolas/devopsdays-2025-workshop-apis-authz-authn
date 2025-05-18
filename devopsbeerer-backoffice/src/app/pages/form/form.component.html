@@ -1,0 +1,42 @@
+<app-layout>
+    <div class="banner">
+        <div class="information">Une bière irrésistible !</div>
+    </div>
+    <div class="wrapper">
+        <main>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+                <h1>Create a new beer</h1>
+                <div class="input-container">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" formControlName="name">
+                </div>
+                <div class="input-container">
+                    <label for="style">Style</label>
+                    <input type="text" name="style" id="style" formControlName="style">
+                </div>
+                <div class="input-flex">
+                    <div class="input-container">
+                        <label for="style">ABV</label>
+                        <input type="number" name="abv" id="abv" formControlName="abv">
+                    </div>
+                    <div class="input-container">
+                        <label for="style">IBU</label>
+                        <input type="number" name="ibu" id="ibu" formControlName="ibu">
+                    </div>
+                    <div class="input-container">
+                        <label for="style">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" formControlName="quantity">
+                    </div>
+                </div>
+                <div class="input-control">
+                    <input type="submit" value="Create the beer !">
+                </div>
+            </form>
+
+            @if (error) {
+            <app-error-box [apiError]="error" message=""></app-error-box>
+            }
+        </main>
+    </div>
+</app-layout>
