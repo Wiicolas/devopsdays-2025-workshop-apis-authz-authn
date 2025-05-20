@@ -4,6 +4,8 @@
 
 This workshop guides you through implementing authentication and authorization in a full-stack application step by step. You'll learn how to secure your API and frontend application using modern OAuth2, Role-Based Access Control (RBAC), and fine-grained permission scopes.
 
+You can find the related presentation inside folder : `authz+authn-presentation`  
+
 ## Prerequisites
 
 - Node.js (v16 or higher)
